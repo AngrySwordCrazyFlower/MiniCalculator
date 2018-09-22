@@ -1,0 +1,99 @@
+import java.util.ArrayList;
+
+public class GrammarScanner {
+
+    private String grammar;
+
+    private int index;
+
+    private StringBuilder builder;
+
+    private CustomVariableTable customVariableTable;
+
+    private ArrayList<Token> tokens;
+
+    public GrammarScanner(String grammar, CustomVariableTable customVariableTable) throws MyException {
+        index = 0;
+        this.grammar = grammar;
+        this.customVariableTable = customVariableTable;
+        builder = new StringBuilder();
+        tokens = new ArrayList<>();
+        start(getNextChar());
+    }
+
+    private void generateToken(Token.TokenType tokenType) {
+        String name = builder.toString();
+        Token token = null;
+        if (!customVariableTable.exists(name))
+            token = customVariableTable.putToken(name, Token.creator(name, tokenType));
+        else {
+            token = customVariableTable.getTokenByName(name);
+        }
+        tokens.add(token);
+        builder.setLength(0);
+    }
+
+    private char getNextChar() {
+        return grammar.charAt(index++);
+    }
+
+    private void start(char ch) throws MyException {
+        if (Character.isDigit(ch)) {
+            builder.append(ch);
+            state1(getNextChar());
+        }
+        else if (Character.isLetter(ch)) {
+            builder.append(ch);
+            state3(getNextChar());
+        } else if (Util.SINGLE_OPERATION_COLLECTION.contains(Character.toString(ch))) {
+            builder.append(ch);
+            state4(getNextChar());
+        } else if (Util.BLANK_OPERATION_COLLECTION.contains(Character.toString(ch))) {
+            start(getNextChar());
+        } else
+            throw new MyException(index, "Unexpected char");
+    }
+
+    private void state1(char ch) throws MyException {
+        if (Character.isDigit(ch)) {
+            builder.append(ch);
+            state1(getNextChar());
+        } else if ('.' == ch) {
+            builder.append(ch);
+            state2(getNextChar());
+        } else {
+            generateToken(Token.TokenType.INTEGER);
+            start(ch);
+        }
+    }
+
+    private void state2(char ch) throws MyException {
+        if (Character.isDigit(ch)) {
+            builder.append(ch);
+            state2(getNextChar());
+        } else {
+            generateToken(Token.TokenType.DOUBLE);
+            start(ch);
+        }
+    }
+
+    private void state3(char ch) throws MyException {
+        if (Character.isLetter(ch) || Character.isDigit(ch)) {
+            builder.append(ch);
+            state3(ch);
+        } else {
+            generateToken(Token.TokenType.VARIABLE);
+            start(ch);
+        }
+    }
+
+    private void state4(char ch) throws MyException {
+        generateToken(Token.TokenType.OPERATION);
+        start(ch);
+    }
+
+    public ArrayList<Token> getTokens() {
+        return tokens;
+    }
+
+}
