@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 
-public class GrammarScanner {
+public class TokenScanner {
 
-    private String grammar;
+    private String sentences;
 
     private int index;
+
+    private int row;
 
     private StringBuilder builder;
 
@@ -12,9 +14,10 @@ public class GrammarScanner {
 
     private ArrayList<Token> tokens;
 
-    public GrammarScanner(String grammar, CustomVariableTable customVariableTable) throws MyException {
+    public TokenScanner(String sentences, CustomVariableTable customVariableTable) throws MyException {
         index = 0;
-        this.grammar = grammar;
+        row = 1;
+        this.sentences = sentences;
         this.customVariableTable = customVariableTable;
         builder = new StringBuilder();
         tokens = new ArrayList<>();
@@ -24,8 +27,10 @@ public class GrammarScanner {
     private void generateToken(Token.TokenType tokenType) {
         String name = builder.toString();
         Token token = null;
-        if (!customVariableTable.exists(name))
-            token = customVariableTable.putToken(name, Token.creator(name, tokenType));
+        if (!customVariableTable.exists(name)) {
+            token = Token.creator(name, tokenType);
+            customVariableTable.putToken(name, Token.creator(name, tokenType));
+        }
         else {
             token = customVariableTable.getTokenByName(name);
         }
@@ -34,7 +39,13 @@ public class GrammarScanner {
     }
 
     private char getNextChar() {
-        return grammar.charAt(index++);
+        index++;
+        if (index > sentences.length())
+            return '\0';
+        char c = sentences.charAt(index - 1);
+        if ('\n' == c)
+            row++;
+        return c;
     }
 
     private void start(char ch) throws MyException {
@@ -50,7 +61,7 @@ public class GrammarScanner {
             state4(getNextChar());
         } else if (Util.BLANK_OPERATION_COLLECTION.contains(Character.toString(ch))) {
             start(getNextChar());
-        } else
+        } else if (ch != '\0')
             throw new MyException(index, "Unexpected char");
     }
 

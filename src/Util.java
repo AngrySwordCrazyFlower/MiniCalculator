@@ -18,7 +18,6 @@ public class Util {
         BLANK_OPERATION_COLLECTION.add(" ");
         BLANK_OPERATION_COLLECTION.add("\n");
         BLANK_OPERATION_COLLECTION.add("\r");
-        BLANK_OPERATION_COLLECTION.add("\0");
     }
 
 }
