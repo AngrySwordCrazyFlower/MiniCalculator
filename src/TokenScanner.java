@@ -8,6 +8,8 @@ public class TokenScanner {
 
     private int row;
 
+    private int column;
+
     private StringBuilder builder;
 
     private CustomVariableTable customVariableTable;
@@ -40,11 +42,15 @@ public class TokenScanner {
 
     private char getNextChar() {
         index++;
+        column++;
         if (index > sentences.length())
             return '\0';
         char c = sentences.charAt(index - 1);
-        if ('\n' == c)
+        if ('\n' == c){
             row++;
+            column = 1;
+        }
+
         return c;
     }
 
@@ -62,7 +68,7 @@ public class TokenScanner {
         } else if (Util.BLANK_OPERATION_COLLECTION.contains(Character.toString(ch))) {
             start(getNextChar());
         } else if (ch != '\0')
-            throw new MyException(index, "Unexpected char");
+            throw new MyException(row,column, "Unexpected char");
     }
 
     private void state1(char ch) throws MyException {
