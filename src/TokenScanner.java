@@ -105,7 +105,32 @@ public class TokenScanner {
     }
 
     private void state4(char ch) throws MyException {
-        generateToken(Token.TokenType.OPERATION);
+        switch (ch) {
+            case '+':
+                generateToken(Token.TokenType.OPERATION_PLUS);
+                break;
+            case '-':
+                generateToken(Token.TokenType.OPERATION_MINUS);
+                break;
+            case '*':
+                generateToken(Token.TokenType.OPERATION_MULTIPLY);
+                break;
+            case '/':
+                generateToken(Token.TokenType.OPERATION_DIVIDE);
+                break;
+            case '(':
+                generateToken(Token.TokenType.OPERATION_LEFT_BRACKET);
+                break;
+            case ')':
+                generateToken(Token.TokenType.OPERATION_RIGHT_BRACKET);
+                break;
+            case '&':
+                generateToken(Token.TokenType.OPERATION_AND);
+                break;
+            case '|':
+                generateToken(Token.TokenType.OPERATION_OR);
+                break;
+        }
         start(ch);
     }
 
