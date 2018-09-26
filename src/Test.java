@@ -10,6 +10,10 @@ public class Test {
             for (Token token : tokens) {
                 System.out.println(token.getName());
             }
+
+            int a = 1;
+            int b = 2;
+            System.out.println(a + + + - - - + + + b);
         } catch (MyException e) {
             e.printStackTrace();
         }
