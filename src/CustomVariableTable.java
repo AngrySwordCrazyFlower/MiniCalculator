@@ -14,7 +14,7 @@ public class CustomVariableTable {
     private final Scope scope;
 
     private final ConcurrentHashMap<String, Token> hashMap;
-
+    //作用域
     static class Scope {
 
         public static final Scope LOCAL_SCOPE = new Scope();
