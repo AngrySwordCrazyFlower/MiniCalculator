@@ -97,7 +97,7 @@ public class TokenScanner {
     private void state3(char ch) throws MyException {
         if (Character.isLetter(ch) || Character.isDigit(ch)) {
             builder.append(ch);
-            state3(ch);
+            state3(getNextChar());
         } else {
             generateToken(Token.TokenType.VARIABLE);
             start(ch);
@@ -105,7 +105,32 @@ public class TokenScanner {
     }
 
     private void state4(char ch) throws MyException {
-        generateToken(Token.TokenType.OPERATION);
+        switch (ch) {
+            case '+':
+                generateToken(Token.TokenType.OPERATION_PLUS);
+                break;
+            case '-':
+                generateToken(Token.TokenType.OPERATION_MINUS);
+                break;
+            case '*':
+                generateToken(Token.TokenType.OPERATION_MULTIPLY);
+                break;
+            case '/':
+                generateToken(Token.TokenType.OPERATION_DIVIDE);
+                break;
+            case '(':
+                generateToken(Token.TokenType.OPERATION_LEFT_BRACKET);
+                break;
+            case ')':
+                generateToken(Token.TokenType.OPERATION_RIGHT_BRACKET);
+                break;
+            case '&':
+                generateToken(Token.TokenType.OPERATION_AND);
+                break;
+            case '|':
+                generateToken(Token.TokenType.OPERATION_OR);
+                break;
+        }
         start(ch);
     }
 

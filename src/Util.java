@@ -14,6 +14,8 @@ public class Util {
         SINGLE_OPERATION_COLLECTION.add("/");
         SINGLE_OPERATION_COLLECTION.add("|");
         SINGLE_OPERATION_COLLECTION.add("&");
+        SINGLE_OPERATION_COLLECTION.add("(");
+        SINGLE_OPERATION_COLLECTION.add(")");
 
         BLANK_OPERATION_COLLECTION.add(" ");
         BLANK_OPERATION_COLLECTION.add("\n");
