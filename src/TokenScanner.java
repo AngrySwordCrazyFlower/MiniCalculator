@@ -97,7 +97,7 @@ public class TokenScanner {
     private void state3(char ch) throws MyException {
         if (Character.isLetter(ch) || Character.isDigit(ch)) {
             builder.append(ch);
-            state3(ch);
+            state3(getNextChar());
         } else {
             generateToken(Token.TokenType.VARIABLE);
             start(ch);
