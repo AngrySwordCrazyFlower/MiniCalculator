@@ -48,7 +48,7 @@ public class TokenScanner {
         char c = sentences.charAt(index - 1);
         if ('\n' == c){
             row++;
-            column = 1;
+            column = 0;
         }
 
         return c;
@@ -68,7 +68,7 @@ public class TokenScanner {
         } else if (Util.BLANK_OPERATION_COLLECTION.contains(Character.toString(ch))) {
             start(getNextChar());
         } else if (ch != '\0')
-            throw new MyException(row,column, "Unexpected char");
+            throw new MyException(row, column, "Unexpected char");
     }
 
     private void state1(char ch) throws MyException {
