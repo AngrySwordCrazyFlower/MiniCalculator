@@ -13,8 +13,8 @@ public class CustomVariableTable {
 
     private final Scope scope;
 
-    private final ConcurrentHashMap<String, Token> hashMap;
-    //作用域
+    private final ConcurrentHashMap<String, AbstractType> hashMap;
+
     static class Scope {
 
         public static final Scope LOCAL_SCOPE = new Scope();
@@ -32,8 +32,8 @@ public class CustomVariableTable {
         this.hashMap = new ConcurrentHashMap<>();
     }
 
-    public Token putToken(String name, Token token) {
-        return hashMap.put(name, token);
+    public AbstractType put(String name, AbstractType variable) {
+        return hashMap.put(name, variable);
     }
 
     public boolean exists(String name) {
@@ -46,9 +46,9 @@ public class CustomVariableTable {
         return false;
     }
 
-    public Token getTokenByName(String name) {
+    public AbstractType getVariableByName(String name) {
         CustomVariableTable current = this;
-        Token result = null;
+        AbstractType result = null;
         while (null != current) {
             if (null != (result = current.hashMap.get(name)))
                 break;

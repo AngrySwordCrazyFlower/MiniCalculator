@@ -3,9 +3,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 public class SuffixConvertMachine {
-    public final static HashMap<Token.TokenType,Integer> priorityTable = null;
+    public final static HashMap<Token.TokenType,Integer> priorityTable;
 
     static{
+        priorityTable = new HashMap<>();
         priorityTable.put(Token.TokenType.OPERATION_PLUS,10);
         priorityTable.put(Token.TokenType.OPERATION_MINUS,10);
         priorityTable.put(Token.TokenType.OPERATION_MULTIPLY,20);
@@ -22,7 +23,9 @@ public class SuffixConvertMachine {
         ArrayList<Token> suffix = new ArrayList<>();
         Stack<Token> stk = new Stack<>();
         for (Token token : infixTokens) {
-            Token topToken = stk.peek();
+            Token topToken = null;
+            if (!stk.isEmpty())
+                topToken = stk.peek();
             if(topToken != null){
                 if (token.getTokenType() == Token.TokenType.OPERATION_PLUS ||
                         token.getTokenType() == Token.TokenType.OPERATION_MINUS ||
