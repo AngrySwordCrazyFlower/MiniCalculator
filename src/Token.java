@@ -34,22 +34,7 @@ public class Token {
     private TokenType tokenType;
 
     public static Token creator(String s, TokenType tokenType) {
-
-        //have something to do with s : like if s=".5" change it to "0.5"
-
-//        if (tokenType == TokenType.INTEGER) {
-//            return new Token(s, tokenType);
-//        } else if (tokenType == TokenType.DOUBLE) {
-//            return new Token(s, tokenType);
-//        } else if (tokenType == TokenType.OPERATION) {
-//            return new Token(s, tokenType);
-//        } else if (tokenType == TokenType.VARIABLE) {
-//            return new Token(s, tokenType);
-//        }
-
         return new Token(s, tokenType);
-
-//        return null;
     }
 
     private Token(String s, TokenType tokenType) {

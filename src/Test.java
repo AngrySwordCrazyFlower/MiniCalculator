@@ -7,9 +7,13 @@ public class Test {
         try {
             TokenScanner scanner = new TokenScanner("(1 + 2.  * a1) + 3", CustomVariableTable.GLOBAL_VARIABLE_TABLE);
             ArrayList<Token> tokens = scanner.getTokens();
+
+            tokens = SuffixConvertMachine.Convert(tokens);
+
             for (Token token : tokens) {
                 System.out.println(token.getName());
             }
+
         } catch (MyException e) {
             e.printStackTrace();
         }

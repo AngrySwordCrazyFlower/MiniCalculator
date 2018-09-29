@@ -36,7 +36,7 @@ public class TokenScanner {
             int index = name.indexOf('.');
             if (index == 0)
                 name = "0" + name;
-            else if (index == name.length())
+            else if (index == name.length() - 1)
                 name = name.substring(0, name.length() - 1);
         }
 
@@ -55,6 +55,7 @@ public class TokenScanner {
 
     private void generateToken(Token.TokenType tokenType) {
         String name = builder.toString();
+        name = dealTokenName(name, tokenType);
         Token token = Token.creator(name, tokenType);
         tokens.add(token);
         builder.setLength(0);

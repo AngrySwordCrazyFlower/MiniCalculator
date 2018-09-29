@@ -3,9 +3,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 public class SuffixConvertMachine {
-    public final static HashMap<Token.TokenType,Integer> priorityTable = null;
+    public final static HashMap<Token.TokenType,Integer> priorityTable;
 
     static{
+        priorityTable = new HashMap<>();
         priorityTable.put(Token.TokenType.OPERATION_PLUS,10);
         priorityTable.put(Token.TokenType.OPERATION_MINUS,10);
         priorityTable.put(Token.TokenType.OPERATION_MULTIPLY,20);
