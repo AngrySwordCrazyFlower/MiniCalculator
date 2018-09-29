@@ -23,7 +23,9 @@ public class SuffixConvertMachine {
         ArrayList<Token> suffix = new ArrayList<>();
         Stack<Token> stk = new Stack<>();
         for (Token token : infixTokens) {
-            Token topToken = stk.peek();
+            Token topToken = null;
+            if (!stk.isEmpty())
+                topToken = stk.peek();
             if(topToken != null){
                 if (token.getTokenType() == Token.TokenType.OPERATION_PLUS ||
                         token.getTokenType() == Token.TokenType.OPERATION_MINUS ||
