@@ -29,24 +29,25 @@ public class SuffixConvertMachine {
                     token.getTokenType() == Token.TokenType.OPERATION_DIVIDE){
                 if(stk.size() == 0){
                     stk.push(token);
-
+                    continue;
                 }
 
                 else if(getPriority(stk.peek()) < getPriority(token) || stk.peek().getTokenType() == Token.TokenType.OPERATION_LEFT_BRACKET){
                     stk.push(token);
-
+                    continue;
                 }
 
 
-                while(getPriority(stk.peek()) >= getPriority(token)){
-                    if(stk.peek().getTokenType() != Token.TokenType.OPERATION_LEFT_BRACKET){
-                        suffix.add(stk.peek());
-                    }
+                while(getPriority(stk.peek()) >= getPriority(token) && stk.peek().getTokenType() != Token.TokenType.OPERATION_LEFT_BRACKET){
+
+                    suffix.add(stk.peek());
+
                     stk.pop();
-                    if(getPriority(stk.peek()) < getPriority(token)){
-                        stk.push(token);
-                    }
+                    if(stk.size() == 0)
+                        break;
                 }
+                stk.push(token);
+
 
 
 
