@@ -17,7 +17,7 @@ public class Test {
                 out.println(token.getName());
             }
 
-            out.println(Calculator.getResult(tokens));
+            out.println(Calculator.getResult(tokens, CustomVariableTable.GLOBAL_VARIABLE_TABLE));
 
 
 

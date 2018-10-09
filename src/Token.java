@@ -1,45 +1,35 @@
 public class Token {
 
-    static class TokenType {
-
-        public static final TokenType INTEGER = new TokenType();
-
-        public static final TokenType DOUBLE = new TokenType();
-
-        public static final TokenType VARIABLE = new TokenType();
-
-        public static final TokenType OPERATION_PLUS = new TokenType();
-
-        public static final TokenType OPERATION_MINUS = new TokenType();
-
-        public static final TokenType OPERATION_MULTIPLY = new TokenType();
-
-        public static final TokenType OPERATION_DIVIDE = new TokenType();
-
-        public static final TokenType OPERATION_LEFT_BRACKET = new TokenType();
-
-        public static final TokenType OPERATION_RIGHT_BRACKET = new TokenType();
-
-        public static final TokenType OPERATION_AND = new TokenType();
-
-        public static final TokenType OPERATION_OR = new TokenType();
-
-        private TokenType() {
-
-        }
+    enum  TokenType {
+        INTEGER,
+        DOUBLE,
+        VARIABLE,
+        OPERATION_PLUS,
+        OPERATION_MINUS,
+        OPERATION_MULTIPLY,
+        OPERATION_DIVIDE,
+        OPERATION_LEFT_BRACKET,
+        OPERATION_RIGHT_BRACKET,
+        OPERATION_AND,
+        OPERATION_OR
     }
 
     private String name;
 
     private TokenType tokenType;
 
-    public static Token creator(String s, TokenType tokenType) {
-        return new Token(s, tokenType);
+    private int row;
+    private int column;
+
+    public static Token creator(String s, TokenType tokenType, int row, int column) {
+        return new Token(s, tokenType, row, column);
     }
 
-    private Token(String s, TokenType tokenType) {
+    private Token(String s, TokenType tokenType, int row, int column) {
         this.name = s;
         this.tokenType = tokenType;
+        this.row = row;
+        this.column = column;
     }
 
     public TokenType getTokenType() {
@@ -50,4 +40,16 @@ public class Token {
         return name;
     }
 
+    @Override
+    public String toString() {
+        return name + "  " + tokenType.toString();
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
 }

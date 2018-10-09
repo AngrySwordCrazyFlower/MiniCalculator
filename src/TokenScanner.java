@@ -46,6 +46,7 @@ public class TokenScanner {
     public TokenScanner(String sentences, CustomVariableTable customVariableTable) throws MyException {
         index = 0;
         row = 1;
+        column = 0;
         this.sentences = sentences;
         this.customVariableTable = customVariableTable;
         builder = new StringBuilder();
@@ -55,8 +56,9 @@ public class TokenScanner {
 
     private void generateToken(Token.TokenType tokenType) {
         String name = builder.toString();
+        int column = this.column - name.length();
         name = dealTokenName(name, tokenType);
-        Token token = Token.creator(name, tokenType);
+        Token token = Token.creator(name, tokenType, row, column);
         tokens.add(token);
         builder.setLength(0);
 
@@ -67,6 +69,7 @@ public class TokenScanner {
         }
 
     }
+
 
     private char getNextChar() {
         index++;
