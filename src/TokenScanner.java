@@ -12,8 +12,6 @@ public class TokenScanner {
 
     private StringBuilder builder;
 
-    private CustomVariableTable customVariableTable;
-
     private ArrayList<Token> tokens;
 
     private static String dealTokenName(String name, Token.TokenType tokenType) {
@@ -43,12 +41,11 @@ public class TokenScanner {
         return name;
     }
 
-    public TokenScanner(String sentences, CustomVariableTable customVariableTable) throws MyException {
+    public TokenScanner(String sentences) throws MyException {
         index = 0;
         row = 1;
         column = 0;
         this.sentences = sentences;
-        this.customVariableTable = customVariableTable;
         builder = new StringBuilder();
         tokens = new ArrayList<>();
         start(getNextChar());
@@ -61,13 +58,6 @@ public class TokenScanner {
         Token token = Token.creator(name, tokenType, row, column);
         tokens.add(token);
         builder.setLength(0);
-
-        if (tokenType == Token.TokenType.INTEGER) {
-            customVariableTable.put(name, new CustomInteger(Integer.valueOf(name)));
-        } else if (tokenType == Token.TokenType.DOUBLE) {
-            customVariableTable.put(name, new CustomDouble(Double.valueOf(name)));
-        }
-
     }
 
 
@@ -91,8 +81,7 @@ public class TokenScanner {
             state1(getNextChar());
         }
         else if (Character.isLetter(ch)) {
-            builder.append(ch);
-            state3(getNextChar());
+            throw new MyException(row, column, "Unexpected char");
         } else if (Util.SINGLE_OPERATION_COLLECTION.contains(Character.toString(ch))) {
             builder.append(ch);
             switch (ch) {
@@ -123,6 +112,9 @@ public class TokenScanner {
             }
         } else if (Util.BLANK_OPERATION_COLLECTION.contains(Character.toString(ch))) {
             start(getNextChar());
+        } else if (ch == '.'){
+            builder.append(ch);
+            state2(getNextChar());
         } else if (ch != '\0')
             throw new MyException(row, column, "Unexpected char");
     }
@@ -146,16 +138,6 @@ public class TokenScanner {
             state2(getNextChar());
         } else {
             generateToken(Token.TokenType.DOUBLE);
-            start(ch);
-        }
-    }
-
-    private void state3(char ch) throws MyException {
-        if (Character.isLetter(ch) || Character.isDigit(ch)) {
-            builder.append(ch);
-            state3(getNextChar());
-        } else {
-            generateToken(Token.TokenType.VARIABLE);
             start(ch);
         }
     }

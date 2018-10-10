@@ -3,7 +3,6 @@ public class Token {
     enum  TokenType {
         INTEGER,
         DOUBLE,
-        VARIABLE,
         OPERATION_PLUS,
         OPERATION_MINUS,
         OPERATION_MULTIPLY,
@@ -51,5 +50,13 @@ public class Token {
 
     public int getColumn() {
         return column;
+    }
+
+    public Token toNegative() {
+        if (name.startsWith("-"))
+            name = name.substring(1);
+        else
+            name = "-" + name;
+        return this;
     }
 }

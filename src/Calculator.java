@@ -5,7 +5,7 @@ import java.util.Stack;
 public class Calculator {
 
 //    public static double getResult(ArrayList<Token> tokens, CustomVariableTable.Scope scope) {
-    public static Token getResult(ArrayList<Token> tokens, CustomVariableTable variableTable) throws MyException {
+    public static Token getResult(ArrayList<Token> tokens) throws MyException {
 
         Stack<Token> generateToken = new Stack<>();
         for (Token tmp : tokens) {

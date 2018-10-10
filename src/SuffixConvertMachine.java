@@ -22,15 +22,23 @@ public class SuffixConvertMachine {
     public static ArrayList<Token> Convert(ArrayList<Token> infixTokens) throws MyException {
         ArrayList<Token> suffix = new ArrayList<>();
         Stack<Token> stk = new Stack<>();
+        boolean positive = true;
+        boolean preOp = false;
         for (Token token : infixTokens) {
 
             switch (token.getTokenType()) {
 
 
-                case OPERATION_PLUS:
-                case OPERATION_MULTIPLY:
                 case OPERATION_MINUS:
+                case OPERATION_PLUS:
+                    if (preOp) {
+                        if (token.getTokenType() == Token.TokenType.OPERATION_MINUS)
+                            positive = !positive;
+                        break;
+                    }
+                    else preOp = true;
                 case OPERATION_DIVIDE:
+                case OPERATION_MULTIPLY:
                     while (!stk.isEmpty() && getPriority(stk.peek()) >= getPriority(token) && stk.peek().getTokenType() != Token.TokenType.OPERATION_LEFT_BRACKET)
                         suffix.add(stk.pop());
                 case OPERATION_LEFT_BRACKET:
@@ -38,8 +46,11 @@ public class SuffixConvertMachine {
                     break;
                 case DOUBLE:
                 case INTEGER:
-                case VARIABLE:
+                    if (!positive)
+                        token.toNegative();
                     suffix.add(token);
+                    positive = true;
+                    preOp = false;
                     break;
 
                 case OPERATION_RIGHT_BRACKET:
