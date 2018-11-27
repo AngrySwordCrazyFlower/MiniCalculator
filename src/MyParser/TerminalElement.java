@@ -2,7 +2,7 @@ package MyParser;
 
 public class TerminalElement extends AbstractElement {
 
-    TerminalElement(String text) {
+    public TerminalElement(String text) {
         super(text, AbstractElement.TERMINAL_ELEMENT);
     }
 
