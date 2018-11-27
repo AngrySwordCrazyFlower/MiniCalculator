@@ -16,6 +16,7 @@ public class ParserException extends Exception {
     }
 
     static final ParserExceptionType GRAMMAR_EXCEPTION = new ParserExceptionType(2001, "Grammar is wrong.");
+    static final ParserExceptionType WRONG_EXPRESSION = new ParserExceptionType(2003, "The expression is wrong.");
     static final ParserExceptionType WRONG_SYMBOL = new ParserExceptionType(2002, "The symbol is't terminal symbol nor not-terminal symbol.");
 
     private int startRow;

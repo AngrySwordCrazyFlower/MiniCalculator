@@ -150,7 +150,7 @@ public class Grammar {
         }
     }
 
-    public Node parse(List<Node> nodes) {
+    public Node parse(List<Node> nodes) throws ParserException {
         nodes.add(new Node(terminalElementMap.get(END_TERMINAL_STRING)));
         Stack<Integer> stack = new Stack<Integer>();
         Stack<Node> nodeStack = new Stack<>();
@@ -164,7 +164,7 @@ public class Grammar {
             nextAbstractElement = node.abstractElement;
             action = states.get(stack.peek()).actionMap.get(nextAbstractElement);
             if (action == null) {
-                System.out.println("Wrong");
+                throw new ParserException(0, 0, ParserException.WRONG_EXPRESSION);
             } else {
                 switch (action.type) {
                     case Action.SHIFT:
@@ -189,7 +189,7 @@ public class Grammar {
                 }
             }
         }
-        return null;
+        throw new ParserException(0, 0, ParserException.WRONG_EXPRESSION);
     }
 
     public Map<String, TerminalElement> getTerminalElementMap() {
