@@ -91,31 +91,31 @@ public class LexerScanner {
         throw new LexerException(startRow, startColumn, LexerException.UNEXPECTED_CHAR);
     }
 
-    private static Token operationLeftBracket(LexerReader reader, StringBuffer text, int startRow, int startColumn) {
+    private static Token operationLeftBracket(LexerReader reader, StringBuffer text, int startRow, int startColumn) throws LexerException {
         return Token.creator(text.toString(), Token.OPERATION_LEFT_BRACKET, startRow, startColumn);
     }
 
-    private static Token operationRightBracket(LexerReader reader, StringBuffer text, int startRow, int startColumn) {
+    private static Token operationRightBracket(LexerReader reader, StringBuffer text, int startRow, int startColumn) throws LexerException {
         return Token.creator(text.toString(), Token.OPERATION_RIGHT_BRACKET, startRow, startColumn);
     }
 
-    private static Token operationPlus(LexerReader reader, StringBuffer text, int startRow, int startColumn) {
+    private static Token operationPlus(LexerReader reader, StringBuffer text, int startRow, int startColumn) throws LexerException {
         return Token.creator(text.toString(), Token.OPERATION_PLUS, startRow, startColumn);
     }
 
-    private static Token operationMinus(LexerReader reader, StringBuffer text, int startRow, int startColumn) {
+    private static Token operationMinus(LexerReader reader, StringBuffer text, int startRow, int startColumn) throws LexerException {
         return Token.creator(text.toString(), Token.OPERATION_MINUS, startRow, startColumn);
     }
 
-    private static Token operationDivide(LexerReader reader, StringBuffer text, int startRow, int startColumn) {
+    private static Token operationDivide(LexerReader reader, StringBuffer text, int startRow, int startColumn) throws LexerException {
         return Token.creator(text.toString(), Token.OPERATION_DIVIDE, startRow, startColumn);
     }
 
-    private static Token operationMultiply(LexerReader reader, StringBuffer text, int startRow, int startColumn) {
+    private static Token operationMultiply(LexerReader reader, StringBuffer text, int startRow, int startColumn) throws LexerException {
         return Token.creator(text.toString(), Token.OPERATION_MULTIPLY, startRow, startColumn);
     }
 
-    private static Token numberInteger(LexerReader reader, StringBuffer text, int startRow, int startColumn) {
+    private static Token numberInteger(LexerReader reader, StringBuffer text, int startRow, int startColumn) throws LexerException {
         char ch = reader.previewNextChar();
         if (Character.isDigit(ch)) {
             text.append(reader.getNextChar());
@@ -124,16 +124,18 @@ public class LexerScanner {
             text.append(reader.getNextChar());
             return numberDouble(reader, text, startRow, startColumn);
         } else
-            return Token.creator(text.toString(), Token.NUMBER, startRow, startColumn);
+            return Token.creator(text.toString(), Token.NUMBER_INT, startRow, startColumn);
     }
 
-    private static Token numberDouble(LexerReader reader, StringBuffer text, int startRow, int startColumn) {
+    private static Token numberDouble(LexerReader reader, StringBuffer text, int startRow, int startColumn) throws LexerException {
         char ch = reader.previewNextChar();
         if (Character.isDigit(ch)) {
             text.append(reader.getNextChar());
             return numberDouble(reader, text, startRow, startColumn);
-        } else
-            return Token.creator(text.toString(), Token.NUMBER, startRow, startColumn);
+        } else {
+
+            return Token.creator(text.toString(), Token.NUMBER_DOUBLE, startRow, startColumn);
+        }
     }
 
 }

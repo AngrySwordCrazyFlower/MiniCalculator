@@ -1,4 +1,4 @@
-package MyParser;
+package Parser;
 
 public abstract class AbstractElement {
 

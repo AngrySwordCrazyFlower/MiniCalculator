@@ -1,4 +1,4 @@
-package MyParser;
+package Parser;
 
 public class NotTerminalElement extends AbstractElement {
 

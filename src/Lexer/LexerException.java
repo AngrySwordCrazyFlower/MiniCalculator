@@ -16,6 +16,8 @@ public class LexerException extends Exception {
     }
 
     public static final LexerExceptionType UNEXPECTED_CHAR = new LexerExceptionType(1001, "Unexpected char.");
+    public static final LexerExceptionType INT_TOO_BIG = new LexerExceptionType(1002, "The int number is too big.");
+    public static final LexerExceptionType DOUBLE_TOO_BIG = new LexerExceptionType(1002, "The double number is too big.");
 
     private int column;
 

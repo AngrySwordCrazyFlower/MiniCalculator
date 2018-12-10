@@ -1,4 +1,4 @@
-package MyParser;
+package Parser;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,14 +46,13 @@ public class Util {
                                 lr1ItemList.add(tempLR1Item);
                             }
                         }
-
                 }
-
             }
         }
     }
 
     public static List<TerminalElement> first(AbstractElement abstractElement, List<Rule> ruleList) {
+        System.out.println(abstractElement);
         List<TerminalElement> result = new ArrayList<>();
         if (abstractElement.getType() == AbstractElement.TERMINAL_ELEMENT) {
             result.add((TerminalElement) abstractElement);

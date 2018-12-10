@@ -1,4 +1,6 @@
-package MyParser;
+package Parser.Node;
+
+import Parser.AbstractElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,16 +9,17 @@ public class Node {
 
     Node parent;
     List<Node> sons;
-    AbstractElement abstractElement;
+    public AbstractElement abstractElement;
+    NodeInfo nodeInfo;
 
-    public Node(AbstractElement abstractElement) {
+    public Node(AbstractElement abstractElement, NodeInfo nodeInfo) {
         this.abstractElement = abstractElement;
         sons = new ArrayList<>();
+        this.nodeInfo = nodeInfo;
     }
 
-    public void addSon(Node node) {
-        sons.add(0, node);
-        node.parent = this;
+    public void setSons(List<Node> nodes) {
+        sons = nodes;
     }
 
     public List<Node> getSons() {
@@ -25,6 +28,10 @@ public class Node {
 
     public AbstractElement getAbstractElement() {
         return abstractElement;
+    }
+
+    public NodeInfo getNodeInfo() {
+        return nodeInfo;
     }
 
     @Override

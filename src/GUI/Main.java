@@ -1,12 +1,10 @@
 package GUI;
 
-import Lexer.LexerException;
-import Lexer.LexerScanner;
-import Lexer.Token;
-import MyParser.Grammar;
-import MyParser.Node;
-import MyParser.ParserException;
-import MyParser.TerminalElement;
+import Lexer.*;
+import Parser.*;
+import Parser.Node.DoubleNodeInfo;
+import Parser.Node.IntNodeInfo;
+import Parser.Node.Node;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -24,10 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class Main extends Application{
@@ -50,21 +45,30 @@ public class Main extends Application{
     private Background mouseOnButtonBackground = new Background(new BackgroundFill(Color.rgb(212, 212, 212, 1), CornerRadii.EMPTY, Insets.EMPTY));
     private Background mousePressedButtonBackground = new Background(new BackgroundFill(Color.rgb(196, 196, 196, 1), CornerRadii.EMPTY, Insets.EMPTY));
 
-    private MyParser.Grammar grammar = new Grammar("E", "+ - * / ( ) i", "E T F",
-            new String[] {
-                    "E -> E + T | E - T | T",
-                    "T -> T * F | T / F | F",
-                    "F -> - F | + F | ( E ) | i"
-            });
+    private Parser.Grammar grammar;
 
     private Label inputLabel;
     private String content;
 
     public Main() throws ParserException {
+        grammar = new Grammar("E", "+ - * / ( ) i", "E T F",
+            new String[] {
+                    "E -> E + T",
+                    "E -> E - T",
+                    "E -> T",
+                    "T -> T * F",
+                    "T -> T / F",
+                    "T -> F",
+                    "F -> + F",
+                    "F -> - F",
+                    "F -> ( E )",
+                    "F -> i"
+            });
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
+        System.out.println(grammar);
         content = "";
         VBox root = new VBox();
         Scene scene = new Scene(root);
@@ -252,8 +256,6 @@ public class Main extends Application{
                         inputLabel.setText(content);
                     }
                 }
-                if (event.getCode().equals(KeyCode.EQUALS))
-                    calculate(content);
                 if (event.getCode().equals(KeyCode.CONTROL))
                     keyControl = true;
                 if (event.getCode().equals(KeyCode.V))
@@ -283,6 +285,12 @@ public class Main extends Application{
             @Override
             public void handle(KeyEvent event) {
                 String text = event.getCharacter();
+
+                if (text.equals("=")) {
+                    calculate(content);
+                    return;
+                }
+
                 if (pattern2.matcher(text).matches()) {
                     content += text.replaceAll("。", ".");
                     inputLabel.setText(content);
@@ -300,7 +308,6 @@ public class Main extends Application{
         button.setBackground(defaultButtonBackground);
 
         button.setOnMouseEntered(event -> {
-            System.out.println("setOnMouseEntered");
             if (button.isPressed()) {
                 button.setBackground(mousePressedButtonBackground);
             } else {
@@ -309,16 +316,13 @@ public class Main extends Application{
             button.setBorder(new Border(new BorderStroke(Color.rgb(175, 175, 175), BorderStrokeStyle.SOLID, null, new BorderWidths(1))));
         });
         button.setOnMouseExited(event -> {
-            System.out.println("setOnMouseExited");
             button.setBackground(defaultButtonBackground);
             button.setBorder(null);
         });
         button.setOnMousePressed(event -> {
-            System.out.println("setOnMousePressed");
             button.setBackground(mousePressedButtonBackground);
         });
         button.setOnMouseReleased(event -> {
-            System.out.println("setOnMouseReleased");
             if (!button.isHover())
                 button.setBackground(defaultButtonBackground);
             else
@@ -330,6 +334,11 @@ public class Main extends Application{
     }
 
     public void drawTree(Pane pane, Node node) {
+        Text text = new Text();
+        text.setText(content);
+        text.setTranslateX(5);
+        text.setTranslateY(text.getBaselineOffset() + 2);
+        pane.getChildren().add(text);
         Map<Node, Integer> nodeWidthMap = new HashMap<>();
 
         calculateWidth(nodeWidthMap, node);
@@ -400,37 +409,44 @@ public class Main extends Application{
 
             for (Token token : tokens) {
                 switch (token.getTokenType()) {
-                    case Token.NUMBER:
-                        nodeList.add(new Node(map.get("i")));
+                    case Token.NUMBER_DOUBLE:
+                        nodeList.add(new Node(map.get("i"), new DoubleNodeInfo(((DoubleTokenInfo) token.getTokenInfo()).getValue())));
+                        break;
+                    case Token.NUMBER_INT:
+                        nodeList.add(new Node(map.get("i"), new IntNodeInfo(((IntTokenInfo) token.getTokenInfo()).getValue())));
                         break;
                     case Token.OPERATION_PLUS:
-                        nodeList.add(new Node(map.get("+")));
+                        nodeList.add(new Node(map.get("+"), null));
                         break;
                     case Token.OPERATION_MINUS:
-                        nodeList.add(new Node(map.get("-")));
+                        nodeList.add(new Node(map.get("-"), null));
                         break;
                     case Token.OPERATION_MULTIPLY:
-                        nodeList.add(new Node(map.get("*")));
+                        nodeList.add(new Node(map.get("*"), null));
                         break;
                     case Token.OPERATION_DIVIDE:
-                        nodeList.add(new Node(map.get("/")));
+                        nodeList.add(new Node(map.get("/"), null));
                         break;
                     case Token.OPERATION_LEFT_BRACKET:
-                        nodeList.add(new Node(map.get("(")));
+                        nodeList.add(new Node(map.get("("), null));
                         break;
                     case Token.OPERATION_RIGHT_BRACKET:
-                        nodeList.add(new Node(map.get(")")));
+                        nodeList.add(new Node(map.get(")"), null));
                         break;
                 }
             }
 
             node = grammar.parse(nodeList);
-
+            if (node.getNodeInfo() instanceof DoubleNodeInfo)
+                inputLabel.setText(String.valueOf(((DoubleNodeInfo) node.getNodeInfo()).getValue()));
+            else
+                inputLabel.setText(String.valueOf(((IntNodeInfo) node.getNodeInfo()).getValue()));
             stage = new Stage();
             pane = new Pane();
             Scene scene = new Scene(pane);
             drawTree(pane, node);
             stage.setScene(scene);
+            content = "";
             stage.show();
         } catch (LexerException | ParserException e) {
             content = "";
